@@ -1,4 +1,11 @@
 # adopted from https://medium.com/travis-on-docker/how-to-version-your-docker-images-1d5c577ebf54
+
+if [[ -n $(git status -s) ]]
+then
+  echo "must commit changes before running"
+  exit
+fi
+
 set -ex
 
 REGISTRY=docker.meshplayground.com
