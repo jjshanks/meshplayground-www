@@ -1,0 +1,48 @@
+server {
+
+    root /var/www;
+
+    # Add index.php to the list if you are using PHP
+    index index.html index.htm index.nginx-debian.html;
+    server_name www.meshplayground.com;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+    location /blog {
+        rewrite ^/blog/(.*)$ /$1 break;
+        proxy_pass http://wordpress/;
+    }
+
+    if ($host = meshplayground.com) {
+        return 301 https://www.meshplayground.com$request_uri;
+    }
+
+    listen [::]:443 ssl ipv6only=on; # managed by Certbot
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/nginx/ssl/server.crt; # managed by Certbot
+    ssl_certificate_key /etc/nginx/ssl/server.key; # managed by Certbot
+    include /etc/nginx/ssl/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/nginx/ssl/ssl-dhparams.pem; # managed by Certbot
+}
+
+server {
+    if ($host = www.meshplayground.com) {
+        return 301 https://www.meshplayground.com$request_uri;
+    }
+
+    if ($host = meshplayground.com) {
+        return 301 https://www.meshplayground.com$request_uri;
+    }
+
+    listen 80 ;
+    listen [::]:80 ;
+    server_name meshplayground.com www.meshplayground.com;
+
+    return 404; # managed by Certbot
+}
+
+upstream wordpress {
+    server 142.93.23.39:8000;
+}
