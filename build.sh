@@ -1,1 +1,1 @@
-docker build -t www.meshplayground.com .
+docker build -t docker.meshplayground.com/www.meshplayground.com:latest .
