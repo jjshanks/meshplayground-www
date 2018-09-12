@@ -5,12 +5,13 @@ REGISTRY=docker.meshplayground.com
 # image name
 IMAGE=www.meshplayground.com
 
+docker run --rm -v "$PWD":/app treeder/bump patch
 version=`cat VERSION`
 echo "version: $version"
 
 ./build.sh
 
-git add -A
+git add VERSION
 git commit -m "version $version"
 git tag -a "$version" -m "version $version"
 git push
