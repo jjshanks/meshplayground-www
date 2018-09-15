@@ -15,6 +15,10 @@ server {
         proxy_pass http://wordpress/;
     }
 
+    location /wp-admin {
+        rewrite ^/(.*)$ https://$server_name/blog/$1 permanent;
+    }
+
     if ($host = meshplayground.com) {
         return 301 https://www.meshplayground.com$request_uri;
     }
